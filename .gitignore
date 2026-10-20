@@ -1,0 +1,17 @@
+# Local survey inputs and generated outputs can contain respondent-level data.
+data/core/*
+!data/core/README.md
+data/future/*
+!data/future/README.md
+data/raw/*
+!data/raw/README.md
+
+# Generated artifacts and local development files.
+output/
+reference/
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+

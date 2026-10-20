@@ -1,0 +1,42 @@
+Question,Resilience_ID,resilience_description,subdomain,include,reverse,type
+language,4,cultural,cultural cap,1,0,scale
+belonging,4,cultural,cultural cap,1,0,scale
+cultural_activities,4,cultural,cultural cap,1,0,scale
+te_reo,4,cultural,cultural cap,1,0,scale
+cultural_knowledge,4,cultural,cultural cap,1,0,scale
+trust_nz_government,5,governance,civic governance,1,0,scale
+trust_local_council,5,governance,civic governance,1,0,scale
+trust_nz_police,5,governance,civic governance,1,0,scale
+safety,3,social,safety and security,1,0,scale
+discrimination,3,social,safety and security,1,1,scale
+loneliness,3,social,social connections,1,1,scale
+independence,3,social,social connections,1,0,scale
+support_in_crisis,3,social,social connections,1,0,scale
+level_of_control,3,social,subjective wellbeing,1,0,scale
+volunteering_time,3,social,social connections,1,0,scale
+paid_working_hours,1,economic,jobs earnings,1,0,time_hours
+job_satisfaction,1,economic,jobs earnings,1,0,scale
+work_life_balance,3,social,time use,1,0,scale
+leisure_time,3,social,subjective wellbeing,1,0,time_minutes
+be_yourself_in_nz,3,social,subjective wellbeing,1,0,scale
+be_yourself_in_newlands,3,social,subjective wellbeing,1,0,scale
+life_satisfaction,3,social,subjective wellbeing,1,0,scale
+meaning_and_purpose,3,social,subjective wellbeing,1,0,scale
+family_wellbeing,3,social,subjective wellbeing,1,0,scale
+access_to_natural_environment,2,environment,environment,1,0,scale
+work_travel_time,3,social,time use,1,0,time_minutes
+basic_life_skills,1,economic,knowledge skills,1,0,scale
+newlands_resident,6,disaster,environment,1,0,binary
+satisfaction_income,1,economic,income consumption,1,0,scale
+confident_in_finding_a_new_job,1,economic,jobs earnings,1,0,scale
+confident_water_safety,2,environment,environment,1,0,scale
+optimal_use_of_land,2,environment,environment,1,0,scale
+personal_mental_health,3,social,health,1,0,scale
+vote_local_elections_2019,5,governance,civic governance,1,0,binary
+vote_general_election_2020,5,governance,civic governance,1,0,binary
+voted_local_elections_2022,5,governance,civic governance,1,0,binary
+voted_general_elections_2023,5,governance,civic governance,1,0,binary
+home_disaster_ready,6,disaster,environment,1,0,binary
+neighbourhood_support_group,6,disaster,environment,1,0,binary
+out_of_newlands_during_day,6,disaster,environment,1,0,binary
+place_out_of_newlands_disaster_ready,6,disaster,environment,1,0,binary
