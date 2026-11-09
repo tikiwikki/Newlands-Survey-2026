@@ -53,8 +53,8 @@ OVERVIEW_COLOR_MAP = {
     "Cultural": "#6A0DAD",
     "Disaster": "#FF4500",
     "Governance": "#0057FF",
-    "Subjective Wellbeing": "#FF66CC",
-    "Other Social": "#7B68EE",
+    "Subjective": "#FF66CC",
+    "Other Social Indicator": "#7B68EE",
 }
 
 INDICATOR_COLOR_OVERRIDES = {
@@ -84,8 +84,8 @@ GROUP_ORDER = [
     "Cultural",
     "Disaster",
     "Governance",
-    "Subjective Wellbeing",
-    "Other Social",
+    "Subjective",
+    "Other Social Indicator",
 ]
 
 OVERVIEW_GROUP_ORDER = GROUP_ORDER
@@ -179,7 +179,7 @@ def build_group_lookup(
     overlap = subjective_questions & other_social_questions
     if overlap:
         raise ValueError(
-            "Subjective Wellbeing and Other Social contain overlapping questions: "
+            "Subjective and Other Social Indicator contain overlapping questions: "
             + ", ".join(sorted(overlap))
         )
 
@@ -200,9 +200,9 @@ def build_group_lookup(
         question = str(row["Question"])
         area = str(row["resilience_description"]).strip().lower()
         if question in subjective_questions:
-            group_lookup[question] = "Subjective Wellbeing"
+            group_lookup[question] = "Subjective"
         elif question in other_social_questions:
-            group_lookup[question] = "Other Social"
+            group_lookup[question] = "Other Social Indicator"
         else:
             group_lookup[question] = area.title()
     return group_lookup
@@ -1483,7 +1483,7 @@ def plot_trend_graph(
     fig, ax = plt.subplots(figsize=FIGSIZE)
     prepare_axes(
         ax,
-        "Newlands Resilience Group - Six resilience area trends to 2035 based on historic annual data from 2019",
+        "Newlands Resilience Group - indicator group trends to 2035 based on historic annual data from 2019",
     )
     for group_name, group_df in area_overview.groupby("group", observed=True):
         ax.plot(

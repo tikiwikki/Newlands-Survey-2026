@@ -212,24 +212,26 @@ QUESTION_METADATA = {
     "confident_water_safety": ("Environment", "environment", "water"),
     "optimal_use_of_land": ("Environment", "environment", "land"),
     "access_to_natural_environment": ("Environment", "environment", "access"),
-    # Subjective wellbeing
-    "personal_mental_health": ("Subjective Wellbeing", "social", "wellbeing"),
-    "life_satisfaction": ("Subjective Wellbeing", "social", "wellbeing"),
-    "meaning_and_purpose": ("Subjective Wellbeing", "social", "wellbeing"),
-    "family_wellbeing": ("Subjective Wellbeing", "social", "wellbeing"),
-    "loneliness": ("Subjective Wellbeing", "social", "wellbeing"),
-    # Other social
-    "safety": ("Other Social", "social", "safety"),
-    "be_yourself_in_nz": ("Other Social", "social", "identity"),
-    "be_yourself_in_newlands": ("Other Social", "social", "identity"),
-    "discrimination": ("Other Social", "social", "inclusion"),
-    "independence": ("Other Social", "social", "agency"),
-    "support_in_crisis": ("Other Social", "social", "support"),
-    "level_of_control": ("Other Social", "social", "agency"),
-    "volunteering_time": ("Other Social", "social", "participation"),
-    "leisure_time": ("Other Social", "social", "time"),
-    "basic_life_skills": ("Other Social", "social", "skills"),
-    "newlands_resident": ("Other Social", "social", "residency"),
+    # Subjective indicators from the approved social subdomain configuration
+    "level_of_control": ("Subjective", "social", "subjective"),
+    "leisure_time": ("Subjective", "social", "subjective"),
+    "be_yourself_in_nz": ("Subjective", "social", "subjective"),
+    "be_yourself_in_newlands": ("Subjective", "social", "subjective"),
+    "life_satisfaction": ("Subjective", "social", "subjective"),
+    "meaning_and_purpose": ("Subjective", "social", "subjective"),
+    "family_wellbeing": ("Subjective", "social", "subjective"),
+    # Remaining social indicators are grouped separately from the subjective subdomain
+    "safety": ("Other Social Indicator", "social", "safety"),
+    "discrimination": ("Other Social Indicator", "social", "inclusion"),
+    "loneliness": ("Other Social Indicator", "social", "wellbeing"),
+    "independence": ("Other Social Indicator", "social", "agency"),
+    "support_in_crisis": ("Other Social Indicator", "social", "support"),
+    "volunteering_time": ("Other Social Indicator", "social", "participation"),
+    "work_life_balance": ("Other Social Indicator", "social", "employment"),
+    "work_travel_time": ("Other Social Indicator", "social", "access"),
+    "personal_mental_health": ("Other Social Indicator", "social", "health"),
+    "basic_life_skills": ("Economic", "economic", "skills"),
+    "newlands_resident": ("Disaster", "disaster", "residency"),
 }
 
 
@@ -268,7 +270,9 @@ class QualityReport:
 
 
 def normalise_text(value: Any) -> str:
-    text = unicodedata.normalize("NFKD", str(value)).encode("ascii", "ignore").decode()
+    text = unicodedata.normalize("NFKD", str(value))
+    text = text.translate(str.maketrans({"'": " ", "’": " ", "‘": " ", "`": " ", "-": " "}))
+    text = text.encode("ascii", "ignore").decode()
     text = text.lower().replace("&", " and ")
     return re.sub(r"[^a-z0-9]+", " ", text).strip()
 
@@ -685,12 +689,12 @@ def score_leisure_time(value: Any) -> float:
 def score_question(question: str, value: Any, survey_year: int | None = None) -> float:
     if question == "newlands_resident" and not pd.isna(value):
         text = normalise_text(value)
-        if any(place in text for place in ("newlands", "paparangi", "bellevue", "woodridge")):
+        if text in {"yes", "y", "true", "1"} or any(
+            place in text for place in ("newlands", "paparangi", "bellevue", "woodridge")
+        ):
             score = 100.0
-        elif text in {"johnsonville", "khandallah broadmeadows or kaiwharawhara"}:
-            score = 0.0
         else:
-            score = score_binary(value)
+            score = 0.0
     elif question in BINARY_QUESTIONS:
         score = score_binary(value)
     elif question == "paid_working_hours":
@@ -1182,4 +1186,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

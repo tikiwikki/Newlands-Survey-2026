@@ -4,6 +4,9 @@ import unittest
 import pandas as pd
 
 from newlands_integrated_pipeline import (
+    POWER_BI_COMPLETENESS_COLUMNS,
+    QUESTION_METADATA,
+    apply_power_bi_rules,
     match_column,
     score_binary,
     score_leisure_time,
@@ -59,7 +62,43 @@ class ScoringTests(unittest.TestCase):
 
     def test_residency_choices(self):
         self.assertEqual(score_question("newlands_resident", "Newlands, Paparangi, Bellevue or Woodridge"), 100)
+        self.assertEqual(score_question("newlands_resident", "Yes"), 100)
+        self.assertEqual(score_question("newlands_resident", "No"), 0)
         self.assertEqual(score_question("newlands_resident", "Johnsonville"), 0)
+
+    def test_social_indicator_chart_groups_follow_config_split(self):
+        subjective = [
+            question
+            for question, metadata in QUESTION_METADATA.items()
+            if metadata[0] == "Subjective"
+        ]
+        other_social = [
+            question
+            for question, metadata in QUESTION_METADATA.items()
+            if metadata[0] == "Other Social Indicator"
+        ]
+
+        self.assertEqual(len(subjective), 7)
+        self.assertEqual(len(other_social), 9)
+
+    def test_2021_residency_is_excluded_from_baseline(self):
+        frame = pd.DataFrame(
+            {
+                "responder_id": [1],
+                "date": [pd.Timestamp("2021-01-01")],
+                "survey_year": [2021],
+                "age_range": ["35-44"],
+                "gender": ["Female"],
+                "source_file": ["survey_2021.csv"],
+                "source_row": [2],
+                **{question: [50] for question in POWER_BI_COMPLETENESS_COLUMNS},
+                "newlands_resident": ["No"],
+            }
+        )
+
+        _, long = apply_power_bi_rules(frame, QualityReport())
+
+        self.assertFalse(long["Question"].eq("newlands_resident").any())
 
     def test_column_matching(self):
         self.assertEqual(match_column("14. Have you experienced feelings of loneliness"), "loneliness")
